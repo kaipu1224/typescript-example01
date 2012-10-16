@@ -1,11 +1,11 @@
 class Stage {
 	private enemy : Enemy;
-
+	
 	constructor(){
 		this.enemy = new Enemy();
 	}
 
-	public update():void {
+	private update():void {
 		this.enemy.update();
 		this.draw();
 	}
@@ -22,7 +22,13 @@ class Stage {
 	}
 
 	public start():void{
-		setInterval(() =>  this.update(),1000/60);
+		//setInterval(() =>  this.update(),1000/60);
+		var updateFunc = () => {
+			this.enemy.update();
+			this.draw();
+			requestAnimFrame(updateFunc);
+		}
+		requestAnimFrame(updateFunc);
 	}
 }
 
@@ -142,6 +148,16 @@ var wh = window.innerHeight;
 canvas.width = ww;
 canvas.height = wh;
 var stage = new Stage();
+var requestAnimFrame: (callback: () => void) => void = (function(){ 
+  return window.requestAnimationFrame || 
+  (<any>window).webkitRequestAnimationFrame || 
+  (<any>window).mozRequestAnimationFrame || 
+  (<any>window).oRequestAnimationFrame || 
+  window.msRequestAnimationFrame || 
+  function(callback){
+      window.setTimeout(callback, 1000 / 60, new Date().getTime()); 
+  }; 
+})();
 
 window.onload = function(){
 	stage.start();

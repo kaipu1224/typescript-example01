@@ -17,9 +17,12 @@ var Stage = (function () {
     };
     Stage.prototype.start = function () {
         var _this = this;
-        setInterval(function () {
-            return _this.update();
-        }, 1000 / 60);
+        var updateFunc = function () {
+            _this.enemy.update();
+            _this.draw();
+            requestAnimFrame(updateFunc);
+        };
+        requestAnimFrame(updateFunc);
     };
     return Stage;
 })();
@@ -116,6 +119,11 @@ var wh = window.innerHeight;
 canvas.width = ww;
 canvas.height = wh;
 var stage = new Stage();
+var requestAnimFrame = (function () {
+    return window.requestAnimationFrame || (window).webkitRequestAnimationFrame || (window).mozRequestAnimationFrame || (window).oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+        window.setTimeout(callback, 1000 / 60, new Date().getTime());
+    };
+})();
 window.onload = function () {
     stage.start();
 };
