@@ -6,4 +6,5 @@ canvas.height = window.innerHeight;
 window.onload = function(){
 	var stage = new game.Stage(canvas);
 	stage.start();
+	
 }
